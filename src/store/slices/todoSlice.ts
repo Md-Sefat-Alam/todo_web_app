@@ -11,7 +11,7 @@ interface ITodos {
 }
 
 const initialState: ITodos = {
-  tasks: [],
+  tasks: JSON.parse(localStorage.getItem("todo") || "[]"),
 };
 
 const todoSlice = createSlice({
@@ -25,18 +25,25 @@ const todoSlice = createSlice({
         description: action.payload.description,
       };
       state.tasks.push(newTask);
+      handleLocalStorage(state.tasks);
     },
     deleteTask: (state, action: PayloadAction<number>) => {
       state.tasks = state.tasks.filter((task) => task.id !== action.payload);
+      handleLocalStorage(state.tasks);
     },
     editTask: (state, action: PayloadAction<ITask>) => {
       const index = state.tasks.findIndex(
         (task) => task.id == action.payload.id
       );
       if (index !== -1) state.tasks[index] = action.payload;
+      handleLocalStorage(state.tasks);
     },
   },
 });
+
+const handleLocalStorage = (tasks: ITask[]) => {
+  localStorage.setItem("todo", JSON.stringify(tasks));
+};
 
 export const { addTask, deleteTask, editTask } = todoSlice.actions;
 export default todoSlice.reducer;
