@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-interface ITask {
+export interface ITask {
   id: number;
   title: string;
   description: string;
@@ -27,7 +27,7 @@ const todoSlice = createSlice({
       state.tasks.push(newTask);
     },
     deleteTask: (state, action: PayloadAction<number>) => {
-      state.tasks = state.tasks.filter((task) => task.id == action.payload);
+      state.tasks = state.tasks.filter((task) => task.id !== action.payload);
     },
     editTask: (state, action: PayloadAction<ITask>) => {
       const index = state.tasks.findIndex(
